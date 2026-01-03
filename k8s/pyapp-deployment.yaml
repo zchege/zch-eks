@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pyapp
+  labels:
+    app: pyapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: pyapp
+  template:
+    metadata:
+      labels:
+        app: pyapp
+    spec:
+      containers:
+        - name: pyapp
+          image: zchege/pyapp:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
