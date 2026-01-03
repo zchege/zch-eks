@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: pyapp
-          image: zchege/gha-pyapp:c5ce64b
+          image: zchege/gha-pyapp:4f6ee21
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
