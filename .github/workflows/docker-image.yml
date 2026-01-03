@@ -19,6 +19,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Build Docker Image
+        run: docker build -t zchege/gha-pyapp:${GITHUB_SHA::7} .
 
+      - name: Push Docker Image
+        run: docker push zchege/gha-pyapp:${GITHUB_SHA::7}
 
-    
+      - name: Install yq
+        run: |
+          sudo wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          sudo chmod +x /usr/bin/yq
+
+      - name: Update deployment.yml with latest Docker tag
+        run: |
+          SHORT_SHA=${GITHUB_SHA::7}
+          yq -i '.spec.template.spec.containers[0].image = "zchege/gha-pyapp:'"$SHORT_SHA"'"' k8s/pyapp-deployment.yaml
